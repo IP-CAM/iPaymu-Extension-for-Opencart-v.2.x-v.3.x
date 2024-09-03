@@ -200,6 +200,9 @@ class ControllerExtensionPaymentIpaymu extends Controller
         //   exit();
         // }
         $this->load->model('checkout/order');
+        $this->load->model('customer/customer'); // Load customer model
+        $this->load->model('setting/setting'); //
+        
         $data = array();
         foreach ($_REQUEST as $key => $value) {
             $data[$key] = $value;
@@ -213,6 +216,23 @@ class ControllerExtensionPaymentIpaymu extends Controller
         if ($data['status'] == 'berhasil') {
             $message = 'Payment Success - iPaymu ID ' . $data['trx_id'];
             $this->model_checkout_order->addOrderHistory($orderId, 2, $message);
+
+            // Send email to customer when payment is successful
+            $mail = new Mail($this->config->get('config_mail_engine'));
+            $mail->protocol = $this->config->get('config_mail_protocol');
+            $mail->parameter = $this->config->get('config_mail_parameter');
+            $mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
+            $mail->smtp_username = $this->config->get('config_mail_smtp_username');
+            $mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
+            $mail->smtp_port = $this->config->get('config_mail_smtp_port');
+            $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+    
+            $mail->setTo($order_info['email']);
+            $mail->setFrom($this->config->get('config_email'));
+            $mail->setSender(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
+            $mail->setSubject(sprintf($this->language->get('text_subject'), $order_info['order_id']));
+            $mail->setText($this->language->get('text_message_success'));
+            $mail->send();
         } else if ($data['status'] == 'expired') {
             $message = 'Payment Expired - iPaymu ID ' . $data['trx_id'];
             $this->model_checkout_order->addOrderHistory($orderId, 7, $message);
