@@ -65,6 +65,7 @@ class ControllerExtensionPaymentIpaymu extends Controller
         // $data['ap_notifyurl'] = str_replace('&amp;', '&', $this->url->link('checkout/checkout'));
 
         $successUrl = $this->url->link('checkout/success&');
+        $cancelUrl = $this->url->link('checkout/cancel');
         $data['ap_returnurl'] = $successUrl;
         $data['ap_notifyurl'] = $this->url->link('extension/payment/ipaymu/payment_notification') . '&order_id=' . $this->session->data['order_id'];
 
@@ -85,7 +86,7 @@ class ControllerExtensionPaymentIpaymu extends Controller
             'comments' => 'Transaksi Pembelian di ' . $_SERVER["SERVER_NAME"] . '', // Optional           
             'ureturn' => '' . $data['ap_returnurl'] . '',
             'unotify' => '' . $data['ap_notifyurl'] . '',
-            'ucancel' => '' . $data['ap_cancelurl'] . '',
+            'ucancel' => '' . $cancelUrl . '',
             'buyer_name'    => "{$this->customer->getFirstName()} {$this->customer->getLastName()}",
             'buyer_phone'   => $this->customer->getTelephone(),
             'buyer_email'   => $this->customer->getEmail(),
