@@ -201,8 +201,8 @@ class ControllerExtensionPaymentIpaymu extends Controller
         //   exit();
         // }
         $this->load->model('checkout/order');
-        $this->load->model('customer/customer'); // Load customer model
-        $this->load->model('setting/setting'); //
+        // $this->load->model('customer/customer'); // Load customer model
+        // $this->load->model('setting/setting'); //
         
         $data = array();
         foreach ($_REQUEST as $key => $value) {
