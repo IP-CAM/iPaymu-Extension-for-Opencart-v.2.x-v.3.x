@@ -64,7 +64,7 @@ class ControllerExtensionPaymentIpaymu extends Controller
         // $data['ap_returnurl'] = str_replace('&amp;', '&', $this->url->link('extension/payment/ipaymu/success', 'order_id=' . $this->session->data['order_id'] . '&crypt=' . $data['crypt']));
         // $data['ap_notifyurl'] = str_replace('&amp;', '&', $this->url->link('checkout/checkout'));
 
-        $successUrl = $this->url->link('checkout/success&');
+        $successUrl = $this->url->link('checkout/success');
         $cancelUrl = $this->url->link('checkout/cancel');
         $data['ap_returnurl'] = $successUrl;
         $data['ap_notifyurl'] = $this->url->link('extension/payment/ipaymu/payment_notification') . '&order_id=' . $this->session->data['order_id'];
